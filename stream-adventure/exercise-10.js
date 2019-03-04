@@ -1,13 +1,12 @@
-const trumpet = require('trumpet');
-const through = require('through2');
-const fs = require('fs');
+const trumpet = require("trumpet");
+const through = require("through2");
+const fs = require("fs");
 const tr = trumpet();
 const { stdout, stdin } = process;
 
+const stream = tr.select(".loud").createStream();
 
-const stream = tr.select('.loud').createStream();
-
-function write (buf, _, next) {
+function write(buf, _, next) {
   this.push(buf.toString().toUpperCase());
   next();
 }

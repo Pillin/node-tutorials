@@ -1,5 +1,5 @@
-const fs = require('fs');
+const fs = require("fs");
 
 const { argv, stdout } = process;
-const [ program, name, file ] = argv;
+const [program, name, file] = argv;
 fs.createReadStream(file).pipe(stdout);

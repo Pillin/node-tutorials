@@ -9,9 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "child_process": "^1.0.2",
     "concat-stream": "^2.0.0",
     "request": "^2.88.0",
     "split": "^1.0.1",
-    "through2": "^3.0.0"
+    "stream-combiner": "^0.2.2",
+    "through2": "^3.0.0",
+    "trumpet": "^1.7.2",
+    "websocket-stream": "^5.1.2"
   }
 }
