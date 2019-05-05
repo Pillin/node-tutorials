@@ -14,6 +14,8 @@
     "request": "^2.88.0",
     "split": "^1.0.1",
     "stream-combiner": "^0.2.2",
+    "tar": "^4.4.8",
+    "through": "^2.3.8",
     "through2": "^3.0.0",
     "trumpet": "^1.7.2",
     "websocket-stream": "^5.1.2"
