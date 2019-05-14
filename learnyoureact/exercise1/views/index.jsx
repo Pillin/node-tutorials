@@ -29,6 +29,12 @@ class TodoList extends React.Component {
   }
 }
 
+let style = {
+  tableContent: {
+    border: "1px solid black;"
+  }
+};
+
 class Todo extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +50,7 @@ class Todo extends React.Component {
     const { title, children } = this.props;
     return (
       <tr>
-        <td style={{ border: "1px solid black;" }}>
+        <td style={style.tableContent}>
           <input
             type="checkbox"
             checked={this.state.checked}
@@ -52,8 +58,8 @@ class Todo extends React.Component {
           />
         </td>
 
-        <td style={{ border: "1px solid black;" }}>{title}</td>
-        <td style={{ border: "1px solid black;" }}>{children}</td>
+        <td style={style.tableContent}>{title}</td>
+        <td style={style.tableContent}>{children}</td>
       </tr>
     );
   }
