@@ -1,6 +1,12 @@
 const express = require("express");
 
-const [nodeProgram, fileProgram, port] = process.argv;
+const [
+  nodeProgram,
+  fileProgram,
+  port,
+  firstObject,
+  secondObject
+] = process.argv;
 const app = express();
 
 app.set("port", port || 3000);
@@ -14,9 +20,12 @@ app.engine(
 require("babel/register")({
   ignore: false
 });
-
+var data = [
+  { title: "Shopping", detail: firstObject },
+  { title: "Hair cut", detail: secondObject }
+];
 app.use("/", function(req, res) {
-  res.render("index", "");
+  res.render("index", { data: data });
 });
 
 app.listen(app.get("port"), function() {
