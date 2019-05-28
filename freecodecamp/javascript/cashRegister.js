@@ -1,3 +1,5 @@
+const PRECISION_NUMBER = 2;
+
 const converseCurrency = {
   PENNY: 0.01,
   NICKEL: 0.05,
@@ -27,6 +29,24 @@ const getAscCurrency = (
   return secondValueCurrency - firstValueCurrency;
 };
 
+const getCurrenciesChange = change => (acc, value) => {
+  if (acc.total === change) {
+    acc.status = "OPEN";
+    return acc;
+  }
+  const [amount, units] = value;
+  const diff = (change - acc.total).toFixed(PRECISION_NUMBER);
+  const needUnits = parseInt(diff / amount);
+
+  const addTotal = units < needUnits * amount ? units : needUnits * amount;
+  if (addTotal > 0) {
+    acc.total += addTotal;
+    acc.change.push([getNameCurrency(amount), addTotal]);
+  }
+
+  return acc;
+};
+
 const checkCashRegister = (price, cash, cid) => {
   const change = cash - price;
 
@@ -35,26 +55,11 @@ const checkCashRegister = (price, cash, cid) => {
     .filter(getLowChange(change))
     .sort(getAscCurrency);
 
-  const returnedCash = values.reduce(
-    (acc, value) => {
-      if (acc.total === change) {
-        acc.status = "OPEN";
-        return acc;
-      }
-      const [amount, units] = value;
-      const needUnits = (change - acc.total) / amount;
-
-      const addTotal = units < needUnits ? amount * units : needUnits * amount;
-
-      if (addTotal > 0) {
-        acc.total += addTotal;
-        acc.change.push([getNameCurrency(amount), addTotal]);
-      }
-
-      return acc;
-    },
-    { status: "CLOSED", total: 0, change: [] }
-  );
+  const returnedCash = values.reduce(getCurrenciesChange(change), {
+    status: "CLOSED",
+    total: 0,
+    change: []
+  });
 
   delete returnedCash.total;
 
@@ -63,6 +68,20 @@ const checkCashRegister = (price, cash, cid) => {
 
 console.log(
   checkCashRegister(19.5, 20, [
+    ["PENNY", 1.01],
+    ["NICKEL", 2.05],
+    ["DIME", 3.1],
+    ["QUARTER", 4.25],
+    ["ONE", 90],
+    ["FIVE", 55],
+    ["TEN", 20],
+    ["TWENTY", 60],
+    ["ONE HUNDRED", 100]
+  ])
+);
+
+console.log(
+  checkCashRegister(3.26, 100, [
     ["PENNY", 1.01],
     ["NICKEL", 2.05],
     ["DIME", 3.1],
