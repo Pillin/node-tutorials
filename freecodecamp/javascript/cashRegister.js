@@ -5,7 +5,6 @@ const converseCurrency = {
   NICKEL: 0.05,
   DIME: 0.1,
   QUARTER: 0.25,
-  DOLLAR: 1,
   ONE: 1,
   FIVE: 5,
   TEN: 10,
@@ -31,7 +30,6 @@ const getAscCurrency = (
 
 const getCurrenciesChange = change => (acc, value) => {
   if (acc.total === change) {
-    acc.status = "OPEN";
     return acc;
   }
   const [amount, units] = value;
@@ -50,17 +48,32 @@ const getCurrenciesChange = change => (acc, value) => {
 const checkCashRegister = (price, cash, cid) => {
   const change = cash - price;
 
-  const values = cid
-    .map(changeNameForValue)
-    .filter(getLowChange(change))
-    .sort(getAscCurrency);
+  const values = cid.map(changeNameForValue);
 
-  const returnedCash = values.reduce(getCurrenciesChange(change), {
-    status: "CLOSED",
+  const sum = values.reduce((acc, [amount, value]) => {
+    acc += value;
+    return acc;
+  }, 0);
+
+  if (sum - change === 0) {
+    return {
+      status: "CLOSED",
+      change: cid
+    };
+  }
+  const onlyLowers = values.filter(getLowChange(change)).sort(getAscCurrency);
+
+  const returnedCash = onlyLowers.reduce(getCurrenciesChange(change), {
+    status: "OPEN",
     total: 0,
     change: []
   });
 
+  const diff = change - returnedCash.total;
+  if (diff > 0) {
+    returnedCash.status = "INSUFFICIENT_FUNDS";
+    returnedCash.change = [];
+  }
   delete returnedCash.total;
 
   return returnedCash;
@@ -91,5 +104,19 @@ console.log(
     ["TEN", 20],
     ["TWENTY", 60],
     ["ONE HUNDRED", 100]
+  ])
+);
+
+console.log(
+  checkCashRegister(19.5, 20, [
+    ["PENNY", 0.5],
+    ["NICKEL", 0],
+    ["DIME", 0],
+    ["QUARTER", 0],
+    ["ONE", 0],
+    ["FIVE", 0],
+    ["TEN", 0],
+    ["TWENTY", 0],
+    ["ONE HUNDRED", 0]
   ])
 );
