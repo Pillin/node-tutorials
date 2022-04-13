@@ -4,7 +4,7 @@
   "description": "",
   "main": "exercise-1.js",
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "bl": "^2.1.2",
     "fs": "0.0.1-security",
     "http": "0.0.0",
